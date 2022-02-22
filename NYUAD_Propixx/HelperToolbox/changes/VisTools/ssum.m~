@@ -1,0 +1,1 @@
+function y = ssum(x);% SSUM computes a 2d sum% lkc 10 July 2010 y = sum((x(:));
