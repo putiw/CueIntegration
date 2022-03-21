@@ -72,7 +72,7 @@ while ~kb.keyCode(kb.escKey) && OnGoing
             kb.keyIsDown = 0;
             while kb.keyIsDown == 0;
                     [kb,~] = CheckKeyboard(kb); % if response with keyboard
-                    [kb,~] = CheckResponseButton_MRI(kb); % if response with response button MRI                    
+                %    [kb,~] = CheckResponseButton_MRI(kb); % if response with response button MRI                    
             end
             
             % Draw blank window until MRI triggers
@@ -85,8 +85,9 @@ while ~kb.keyCode(kb.escKey) && OnGoing
 %            %waiting for trigger 
             kb.keyIsDown = 0;
             while ~kb.keyIsDown
-                    [kb,~] = CheckTrigger_MRI(kb); % if response with response button MRI
-       
+                    %[kb,~] = CheckTrigger_MRI(kb); % if response with response button MRI
+                     [kb,~] = CheckKeyboard(kb); % if response with keyboard
+      
             end
             
             begintime = GetSecs;
@@ -252,7 +253,7 @@ DrawBackground(VP);
                 end
                 %change 2
                 DrawBackground(VP);           
-                Screen('DrawDots', VP.window, [0 0],pa.fixationDotSize,pa.fixationDotColor,[VP.Rect(3)./2 VP.Rect(4)./2],2);
+                 Screen('DrawDots', VP.window, [0 0],pa.fixationDotSize,[0 0 0],[VP.Rect(3)./2 VP.Rect(4)./2],2);
             end
             
             VP.vbl = Screen('Flip', VP.window, [], dontClear); % Draw frame
@@ -284,7 +285,7 @@ DrawBackground(VP);
                 % Wait for response....add code here!
                 %change 18               
                 DrawBackground(VP);
-                Screen('DrawDots', VP.window, [0 0],pa.fixationDotSize+3,[1 1 1],[VP.Rect(3)./2 VP.Rect(4)./2],2);
+                 Screen('DrawDots', VP.window, [0 0],pa.fixationDotSize,[1 1 1],[VP.Rect(3)./2 VP.Rect(4)./2],2);
                 VP.vbl = Screen('Flip', VP.window, [], dontClear);
                 EndT = 0;
                 kb.keyIsDown = 0;
@@ -313,7 +314,7 @@ for condition = 1:pa.exp_mat(5)
     disp(['Accuracy - ' char(pa.conditionNames{condition}) ': ' num2str(acc) '%'])
 end
 filename = fullfile([pwd, '/results/' subject '-' datestr(now,30), '.mat']);
-save(filename,'pa');
+save(filename,'pa','VP');
 
 %% Clean up
 RestrictKeysForKbCheck([]); % Reenable all keys for KbCheck:

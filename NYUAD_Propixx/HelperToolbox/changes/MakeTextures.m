@@ -17,7 +17,7 @@ for bgii =1:nBackgroundTextures
     centerY = -centerY;
     noys(:,:,2) = ones(size(noys));
     
-    cheeseHoleLimit = .85.*pa.screenAperture * VP.pixelsPerDegree ;
+    cheeseHoleLimit = pa.screenAperture * VP.pixelsPerDegree * 1.3;
     
     for ii = 1:length(centerX)
         noys(:,:,2) = noys(:,:,2) & (sqrt((centerX(ii)-x).^2+(centerY(ii)-y).^2) > cheeseHoleLimit);

@@ -4,18 +4,17 @@ rng('shuffle'); % shuffle the random number generator seeds so you don't repeat!
 
 %% Stimulus Parameters
 % These are the locations of the stimuli
-radius = 4;                                                                        % Eccentricity of stimulus
-%change 3
 thetas = [0,90,180,270];    %,180,270                                                       % Polar angle(s) of stimulus
 pa.thetaDirs = thetas;
-pa.rDirs = radius;
-pa.stimX_deg = radius*cosd(thetas);                                 
-pa.stimY_deg = radius*sind(thetas);
-pa.stimulusSizeDeg = 1.5*2;                                                  % Radius
+ pa.rDirs = 5;                                                              % Eccentricity of stimulus
+radius_stim = 5;
+pa.stimX_deg = radius_stim*cosd(thetas);                                 
+pa.stimY_deg = radius_stim*sind(thetas);
+pa.stimulusSizeDeg = 2;                                                  % Radius
 pa.apertureLipConst = 1;                                                   % Can shrink the stimulus to have small border: 1 means there is no border
 pa.screenAperture = pa.apertureLipConst*pa.stimulusSizeDeg;                % aperture after considering border
 pa.numberOfDots = 22;                                                      % number of dots
-pa.numberOfRepeats = 5;                                                    % number of blocks to complete
+pa.numberOfRepeats = 1;                                                    % number of blocks to complete
 pa.trialDuration = 0.5;                                                      % duration of stimulus
 pa.ITI = 1.5;                                                                % duration between stimuli
 pa.fixationAcqDura = 0;                                                    % duration of fixation prior to stimulus
@@ -24,8 +23,7 @@ pa.loops = 1;                                                              % # o
 pa.reversePhi = 1;                                                         % dots change color on wrapping to reduce apparent motion
 pa.directions = [-1 1];                                                    % experiment directions (+1:towards, -1:away)
 pa.coherence = 1;                                                          % Motion coherence levels
-%change 1
-pa.conditionNames   = {'comb','monoL','monoR','bino','blank'}; %,'monoR','bino','blank'                    % Stimulus conditions
+pa.conditionNames   = {'comb'}; %,'monoR','bino','blank'                    % Stimulus conditions
 pa.photo_align = 0;
 if VP.stereoMode == 1
     pa.numFlips = floor(pa.trialDuration*VP.frameRate/2);                  % every other frame for each eye when in interleaved stereo mode
@@ -53,7 +51,7 @@ pa.dotSpacing = (pa.dotDiameterinDeg*1.5)/VP.degreesPerMm;  % in mm since dots a
 
 %% Initial dot motion calculations
 % What is the rate at which the disparity must change?
-pa.deltaDisp = pa.disparityLimit*2*pa.loops/(pa.trialDuration*VP.frameRate/2);
+pa.deltaDisp = pa.disparityLimit*2*pa.loops/(VP.frameRate/2);  %pa.disparityLimit*2*pa.loops/(pa.trialDuration*VP.frameRate/2);
 % Maximum depth extent (to calc the rear radius and max dot size)
 xLocFixationPoint = 0;
 ConvergenceAngleFixation = atand(((VP.IOD/2)+xLocFixationPoint)/VP.screenDistance) + atand(((VP.IOD/2)-xLocFixationPoint)/VP.screenDistance); %left eye + right eye
@@ -83,11 +81,7 @@ for r = 1:pa.numberOfRepeats
 end
 
 pa.repeats_completed = 0;
-
-
-pa.design(181:end,:) = [];
-pa.numberOfTrials = size(pa.design,1);
-
+pa. numberOfTrials = size(pa.design,1);
 %% Savefile parameters
 pa.subjectName = 'Jim';
 pa.movie = 0;
