@@ -14,7 +14,7 @@ pa.stimulusSizeDeg = 2;                                                  % Radiu
 pa.apertureLipConst = 1;                                                   % Can shrink the stimulus to have small border: 1 means there is no border
 pa.screenAperture = pa.apertureLipConst*pa.stimulusSizeDeg;                % aperture after considering border
 pa.numberOfDots = 22;                                                      % number of dots
-pa.numberOfRepeats = 1;                                                    % number of blocks to complete
+pa.numberOfRepeats = 5;                                                    % number of blocks to complete
 pa.trialDuration = 0.5;                                                      % duration of stimulus
 pa.ITI = 1.5;                                                                % duration between stimuli
 pa.fixationAcqDura = 0;                                                    % duration of fixation prior to stimulus
@@ -23,7 +23,7 @@ pa.loops = 1;                                                              % # o
 pa.reversePhi = 1;                                                         % dots change color on wrapping to reduce apparent motion
 pa.directions = [-1 1];                                                    % experiment directions (+1:towards, -1:away)
 pa.coherence = 1;                                                          % Motion coherence levels
-pa.conditionNames   = {'comb'}; %,'monoR','bino','blank'                    % Stimulus conditions
+pa.conditionNames   = {'monoR','blank'}; %,'monoR','bino','blank'                    % Stimulus conditions
 pa.photo_align = 0;
 if VP.stereoMode == 1
     pa.numFlips = floor(pa.trialDuration*VP.frameRate/2);                  % every other frame for each eye when in interleaved stereo mode

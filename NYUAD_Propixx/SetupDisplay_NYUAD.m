@@ -18,7 +18,7 @@ switch(Display) %Display Parameters
         VP.screenHeightMm = 207.8;     %mm
         VP.RefreshRate = 60;       % hz % Note that this is not necessary - the variable frameRate is defined below automatically but needs to be manually defined for macbooks
         VP.whiteValue = 255;
-        VP.stereoMode = 6;         % set to 1 for a propixx
+        VP.stereoMode = 8;         % set to 1 for a propixx
         VP.multiSample = 32;       % PTB will change automatically to max supported on your display
     case 1 % NYUAD
         VP.screenDistance = 880;   %mm
@@ -29,6 +29,15 @@ switch(Display) %Display Parameters
         % VP.RefreshRate = 60;       % hz % Note that this is not necessary - the variable frameRate is defined below automatically but needs to be manually defined for macbooks
         VP.whiteValue = 255;
         VP.stereoMode = 8;         % set to 1 for a propixx
+        VP.multiSample = 32;       % PTB will change automatically to max supported on your display
+    case 2 % puti laptop
+        VP.screenDistance = 570;   %mm
+        VP.IOD = 60;               %mm
+        VP.screenWidthMm = 332.5;      %mm
+        VP.screenHeightMm = 207.8;     %mm
+        VP.RefreshRate = 60;       % hz % Note that this is not necessary - the variable frameRate is defined below automatically but needs to be manually defined for macbooks
+        VP.whiteValue = 255;
+        VP.stereoMode = 4;         % set to 1 for a propixx
         VP.multiSample = 32;       % PTB will change automatically to max supported on your display
 
 end %Display Parameters Switch
@@ -45,36 +54,36 @@ Screen('Preference', 'Verbosity', 3); % Increase level of verbosity for debug pu
 Screen('Preference','VisualDebugLevel', 3);%control verbosity and debugging, level:4 for developing, level:0 disable errors
 VP.screenID = max(Screen('Screens'));    %Screen for display.
 
-switch Display    
-    case 1
-        PsychImaging('AddTask','General','UseDataPixx'); % Tell PTB we want to display on a DataPixx device.
-        
-        if ~Datapixx('IsReady')
-            Datapixx('Open');
-        end
-
-        
-        if (Datapixx('IsVIEWPixx'))
-            Datapixx('EnableVideoScanningBacklight');
-        end
-         Datapixx('EnableVideoStereoBlueline');
-         Datapixx('SetVideoStereoVesaWaveform', 2);      % If driving NVIDIA glasses
-         
-         if Datapixx('IsViewpixx3D') && UseDCdriving
-             Datapixx('EnableVideoLcd3D60Hz');
-         end
-        Datapixx('RegWrRd');        
-    case 2
-        PsychImaging('AddTask','General','UseDataPixx'); % Tell PTB we want to display on a DataPixx device.        
-     
-        if ~Datapixx('IsReady')            
-            Datapixx('Open');
-        end
-        Datapixx('DisablePropixxLampLed');
-        Datapixx('SetPropixxDlpSequenceProgram',2);        
-        Datapixx('EnablePropixxLampLed');
-        Datapixx('RegWr');
-end
+% switch Display    
+%     case 1
+%         PsychImaging('AddTask','General','UseDataPixx'); % Tell PTB we want to display on a DataPixx device.
+%         
+%         if ~Datapixx('IsReady')
+%             Datapixx('Open');
+%         end
+% 
+%         
+%         if (Datapixx('IsVIEWPixx'))
+%             Datapixx('EnableVideoScanningBacklight');
+%         end
+%          Datapixx('EnableVideoStereoBlueline');
+%          Datapixx('SetVideoStereoVesaWaveform', 2);      % If driving NVIDIA glasses
+%          
+%          if Datapixx('IsViewpixx3D') && UseDCdriving
+%              Datapixx('EnableVideoLcd3D60Hz');
+%          end
+%         Datapixx('RegWrRd');        
+%     case 2
+%         PsychImaging('AddTask','General','UseDataPixx'); % Tell PTB we want to display on a DataPixx device.        
+%      
+%         if ~Datapixx('IsReady')            
+%             Datapixx('Open');
+%         end
+%         Datapixx('DisablePropixxLampLed');
+%         Datapixx('SetPropixxDlpSequenceProgram',2);        
+%         Datapixx('EnablePropixxLampLed');
+%         Datapixx('RegWr');
+% end
 
 VP.Display = Display;
 if Display == 0
@@ -91,6 +100,7 @@ VP.windowHeightPix = VP.Rect(4)-VP.Rect(2);
 % accordingly
 if VP.stereoMode == 4
     VP.screenWidthPix = 2*VP.windowWidthPix;
+
 else
     VP.screenWidthPix = VP.windowWidthPix;
 end
@@ -126,10 +136,19 @@ VP.degreesPerMm = 1/VP.MmPerDegree;
 
 if Display == 0 
     VP.frameRate = VP.RefreshRate;
+elseif Display ==2
+    VP.frameRate = VP.RefreshRate;
 else
     % get frame rate of display
     VP.frameRate = Screen('FrameRate',VP.window);
 end
+screenWindow = [0 0 1920 1080];
+if VP.stereoMode == 4
+    [VP.window,VP.Rect]=PsychImaging('OpenWindow', VP.screenID, backGroundColor, screenWindow, [], [], VP.stereoMode, VP.multiSample);
+    SetStereoSideBySideParameters(VP.window, [0,0], [1, 0.5], [1,0], [1, 0.5]);
+end
+    
+    
 % VP.frameRate
 % Define some colors - These are wrong in GL Context - eg glClearColor [0,1]
 VP.white= WhiteIndex(VP.screenID);

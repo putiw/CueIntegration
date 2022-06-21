@@ -1,5 +1,4 @@
 function [VP, pa] = CueIntegration_NYUAD(display);
-
 %change
 subject = input('Enter subject [test]: ','s');
 if isempty(subject)
@@ -10,14 +9,14 @@ end
 data = [];
 global GL; % GL data structure needed for all OpenGL demos
 backGroundColor = [0.5 0.5 0.5].*255; % Gray-scale - calibrate for display so white and black dots have same contrast with background
-skipSync = 0; % skip Sync to deal with sync issues (should be for debugging only)
+skipSync = 1; % skip Sync to deal with sync issues (should be for debugging only)
 VP = SetupDisplay_NYUAD(skipSync, backGroundColor, display);
-if VP.stereoMode == 8
-    Datapixx('SetPropixxDlpSequenceProgram',1); % 1 is for RB3D mode, 3 for setting up to 480Hz, 5 for 1440Hz
-    Datapixx('RegWr');
-    Datapixx('SetPropixx3DCrosstalkLR', 0); % minimize the crosstalk
-    Datapixx('SetPropixx3DCrosstalkRL', 0); % minimize the crosstalk
-end
+% if VP.stereoMode == 8
+%     Datapixx('SetPropixxDlpSequenceProgram',1); % 1 is for RB3D mode, 3 for setting up to 480Hz, 5 for 1440Hz
+%     Datapixx('RegWr');
+%     Datapixx('SetPropixx3DCrosstalkLR', 0); % minimize the crosstalk
+%     Datapixx('SetPropixx3DCrosstalkRL', 0); % minimize the crosstalk
+% end
 
 VP.backGroundColor = backGroundColor;
 priorityLevel=MaxPriority(VP.window);
@@ -70,10 +69,10 @@ while ~kb.keyCode(kb.escKey) && OnGoing
             
             % Doesn't work on my macbook but should work on others   
             kb.keyIsDown = 0;
-            while kb.keyIsDown == 0;
-                    [kb,~] = CheckKeyboard(kb); % if response with keyboard
-                %    [kb,~] = CheckResponseButton_MRI(kb); % if response with response button MRI                    
-            end
+%             while kb.keyIsDown == 0;
+%                      [kb,~] = CheckKeyboard(kb); % if response with keyboard
+%                 %    [kb,~] = CheckResponseButton_MRI(kb); % if response with response button MRI                    
+%             end
             
             % Draw blank window until MRI triggers
             Screen('SelectStereoDrawbuffer', VP.window, 0);
@@ -83,12 +82,12 @@ while ~kb.keyCode(kb.escKey) && OnGoing
             VP.vbl = Screen('Flip', VP.window, [], dontClear);
             
 %            %waiting for trigger 
-            kb.keyIsDown = 0;
-            while ~kb.keyIsDown
-                    %[kb,~] = CheckTrigger_MRI(kb); % if response with response button MRI
-                     [kb,~] = CheckKeyboard(kb); % if response with keyboard
-      
-            end
+%             kb.keyIsDown = 0;
+%             while ~kb.keyIsDown
+%                     %[kb,~] = CheckTrigger_MRI(kb); % if response with response button MRI
+%                      [kb,~] = CheckKeyboard(kb); % if response with keyboard
+%       
+%             end
             
             begintime = GetSecs;
             StateID = 1; % Inter trial interval
@@ -293,7 +292,7 @@ DrawBackground(VP);
                 while ~kb.keyIsDown && stop ==0                    
                     KbCheck;
                     [kb,stop] = CheckKeyboard(kb); % if response with keyboard
-                    [kb,stop] = CheckResponseButton_MRI(kb); % if response with response button MRI
+             %       [kb,stop] = CheckResponseButton_MRI(kb); % if response with response button MRI
                     pa.response(pa.trialNumber,:) = kb.resp;                   
                     if  EndT >= pa.ITI
                         break
@@ -324,8 +323,8 @@ clear moglmorpher;
 Screen('CloseAll');%sca;
 clear moglmorpher;
 Priority(0);
-Datapixx('SetPropixxDlpSequenceProgram',0);
-Datapixx('RegWrRd');
-Datapixx('Close');
+% Datapixx('SetPropixxDlpSequenceProgram',0);
+% Datapixx('RegWrRd');
+% Datapixx('Close');
 
 end
